@@ -52,6 +52,7 @@
 | **Backend** | Express 5 | Minimal, fast Node.js framework for REST APIs |
 | **Database** | MongoDB Atlas + Mongoose 9 | Flexible document model, great for varied leave/attendance schemas |
 | **Auth** | JWT + bcryptjs | Stateless authentication; passwords hashed with 12-round salt |
+| **Email** | Brevo Email API | Reliable transactional email delivery over HTTPS |
 | **Notifications** | react-hot-toast | Lightweight toast notifications for user feedback |
 | **Icons** | react-icons (Hi2) | Heroicons v2 — modern, consistent icon set |
 | **Dates** | date-fns | Tree-shakeable date utility library |
@@ -173,6 +174,10 @@ The app will open on the default Vite dev server port.
 | `ADMIN_NAME` | Seeded admin's full name |
 | `ADMIN_EMAIL` | Seeded admin's email |
 | `ADMIN_PASSWORD` | Seeded admin's password |
+| `BREVO_API_KEY` | Brevo transactional email API key |
+| `BREVO_SENDER_EMAIL` | Verified Brevo sender email address |
+| `BREVO_SENDER_NAME` | Sender name shown in emails |
+| `EMAIL_TIMEOUT_MS` | Email API request timeout in milliseconds |
 
 ### Frontend (`frontend/.env`)
 

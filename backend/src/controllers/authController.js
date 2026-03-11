@@ -40,8 +40,17 @@ export const sendRegisterOtp = async (req, res, next) => {
       return res.status(409).json({ success: false, message: "Email is already registered" });
     }
 
-    const otp = await Otp.generate(email, "registration");
-    await sendOtpEmail(email, otp, "registration");
+    const normalizedEmail = email.trim().toLowerCase();
+    const otp = await Otp.generate(normalizedEmail, "registration");
+
+    try {
+      await sendOtpEmail(normalizedEmail, otp, "registration");
+    } catch (error) {
+      await Otp.deleteMany({ email: normalizedEmail, purpose: "registration" });
+      error.statusCode = 502;
+      error.message = "Unable to send verification OTP email right now";
+      throw error;
+    }
 
     res.json({ success: true, message: "Verification OTP sent to your email" });
   } catch (err) {
@@ -111,13 +120,22 @@ export const forgotPassword = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Email is required" });
     }
 
-    const user = await User.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(404).json({ success: false, message: "No account with that email" });
     }
 
-    const otp = await Otp.generate(email, "reset");
-    await sendOtpEmail(email, otp, "reset");
+    const otp = await Otp.generate(normalizedEmail, "reset");
+
+    try {
+      await sendOtpEmail(normalizedEmail, otp, "reset");
+    } catch (error) {
+      await Otp.deleteMany({ email: normalizedEmail, purpose: "reset" });
+      error.statusCode = 502;
+      error.message = "Unable to send password reset OTP email right now";
+      throw error;
+    }
 
     res.json({ success: true, message: "Password reset OTP sent to your email" });
   } catch (err) {

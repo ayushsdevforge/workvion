@@ -28,8 +28,9 @@ export const errorHandler = (err, _req, res, _next) => {
     return res.status(400).json({ success: false, message: "Invalid ID format" });
   }
 
-  // Log in dev for debugging
-  if (process.env.NODE_ENV === "development") console.error(err);
+  if (status >= 500) {
+    console.error(err);
+  }
 
   res.status(status).json({ success: false, message: err.message || "Internal server error" });
 };

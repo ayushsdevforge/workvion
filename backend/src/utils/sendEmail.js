@@ -1,14 +1,59 @@
-import nodemailer from "nodemailer";
+const emailTimeoutMs = Number(process.env.EMAIL_TIMEOUT_MS) || 10000;
+const brevoApiUrl = "https://api.brevo.com/v3/smtp/email";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: Number(process.env.SMTP_PORT) === 465,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const getSender = () => {
+  const email = process.env.BREVO_SENDER_EMAIL;
+  const name = process.env.BREVO_SENDER_NAME || "Workvion";
+
+  if (!process.env.BREVO_API_KEY) {
+    throw new Error("Missing BREVO_API_KEY environment variable");
+  }
+
+  if (!email) {
+    throw new Error("Missing BREVO_SENDER_EMAIL environment variable");
+  }
+
+  return { email, name };
+};
+
+const sendEmail = async ({ to, subject, html }) => {
+  const startedAt = Date.now();
+  const response = await fetch(brevoApiUrl, {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+    },
+    body: JSON.stringify({
+      sender: getSender(),
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+    signal: AbortSignal.timeout(emailTimeoutMs),
+  });
+
+  try {
+    if (!response.ok) {
+      const errorBody = await response.text();
+      const error = new Error(`Brevo API request failed with status ${response.status}`);
+      error.statusCode = 502;
+      error.response = errorBody;
+      throw error;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Email delivery failed", {
+      message: error.message,
+      code: error.code,
+      response: error.response,
+      durationMs: Date.now() - startedAt,
+    });
+    throw error;
+  }
+};
 
 /**
  * Send an OTP email.
@@ -36,8 +81,7 @@ const sendOtpEmail = async (to, otp, purpose) => {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+  await sendEmail({
     to,
     subject,
     html,
@@ -76,8 +120,7 @@ export const sendLeaveStatusEmail = async (to, name, status, leave) => {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+  await sendEmail({
     to,
     subject,
     html,
