@@ -288,7 +288,7 @@ The entire frontend UI was **designed and built by me from scratch**. I drew ins
 |------|----------------|
 | **ChatGPT (OpenAI)** | Used to generate individual React component snippets (e.g., modals, form layouts, stat cards) which were then customized and integrated into the project. Also helped with brainstorming component structure and getting quick answers on Tailwind utility classes. |
 | **Claude (Anthropic)** | Used occasionally for reviewing code logic, understanding complex async patterns, and getting suggestions on backend validation approaches. |
-| **GitHub Copilot** | Used for resolving configuration issues — helped debug backend/frontend integration problems, Vite config setup, Tailwind v4 migration issues, and environment variable wiring. |
+| **GitHub Copilot** | Used for resolving configuration issues — helped debug backend/frontend integration problems and environment variable wiring. |
 
 
 > Components were sourced from different AI tools, adapted to fit the project's design system, and manually integrated. Backend architecture, API design, database modeling, and overall project assembly were done by me. AI tools were primarily used as productivity aids for individual pieces, not for end-to-end generation it was used by me in large amount still this was because i want to build this platform as much as possible.
@@ -322,3 +322,4 @@ The entire frontend UI was **designed and built by me from scratch**. I drew ins
 <p align="center">
   Built with ❤️ by Ayush Kumar using React, Express, Node & MongoDB
 </p>
+
