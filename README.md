@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Workvion-Employee%20Management-16a34a?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Workvion" />
+  <img src="frontend/public/workvion.png" alt="Workvion" height="80" />
 </p>
 
 <h1 align="center">Workvion</h1>
