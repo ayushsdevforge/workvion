@@ -14,7 +14,7 @@ app.use(cors());          // Allow cross-origin requests
 
 // ── Health check ───────────────────────────────────────
 app.get("/api/health", (_req, res) => {
-  res.json({ success: true, message: "TrackDesk API is running" });
+  res.json({ success: true, message: "Workvion API is running" });
 });
 
 // ── API routes ─────────────────────────────────────────

@@ -19,7 +19,7 @@ const AuthModal = ({ modal, onClose, onLogin, onSendRegisterOtp, onVerifyRegiste
 
   const titles = {
     [VIEWS.LOGIN]: ['Welcome back', 'Sign in to continue to your dashboard'],
-    [VIEWS.REGISTER]: ['Create an account', 'Get started with TrackDesk for free'],
+    [VIEWS.REGISTER]: ['Create an account', 'Get started with Workvion for free'],
     [VIEWS.REGISTER_OTP]: ['Verify your email', `Enter the code sent to ${registerForm.email}`],
     [VIEWS.FORGOT]: ['Forgot password?', 'Enter your email to receive a reset code'],
     [VIEWS.FORGOT_OTP]: ['Reset password', `Enter the code sent to ${resetForm.email}`],
@@ -48,7 +48,7 @@ const AuthModal = ({ modal, onClose, onLogin, onSendRegisterOtp, onVerifyRegiste
             <HiXMark className="h-5 w-5 text-gray-400" />
           </button>
           <div className="mb-4">
-            <img src="/trackdesk.png.png" alt="TrackDesk" className="h-14 object-contain" />
+            <img src="/workvion.png" alt="Workvion" className="h-14 object-contain" />
           </div>
           <h2 className="text-xl font-bold text-gray-900">{title}</h2>
           <p className="text-sm text-gray-500 mt-1">{subtitle}</p>

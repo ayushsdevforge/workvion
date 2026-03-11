@@ -31,7 +31,7 @@ const LandingFooter = () => (
         {/* Logo + description */}
         <div className="md:col-span-4">
           <div className="cursor-pointer mb-6" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <img src="/trackdesk.png.png" alt="TrackDesk" className="h-16 object-contain" />
+            <img src="/workvion.png" alt="Workvion" className="h-16 object-contain" />
           </div>
           <p className="text-white/60 max-w-md leading-relaxed text-[15px]">
             Modern employee leave & attendance management platform built for fast-moving teams. Clean UI, powerful dashboard, and smart reports.
@@ -44,7 +44,7 @@ const LandingFooter = () => (
       </div>
 
       <div className="mt-8 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-sm text-white">© 2026 TrackDesk. All rights reserved.</p>
+        <p className="text-sm text-white">© 2026 Workvion. All rights reserved.</p>
         <p className="text-sm text-white/70">
           Made with <span className="text-green-400">♥</span> by <span className="text-white font-semibold">Ayush Kumar</span>
         </p>

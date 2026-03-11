@@ -1,8 +1,8 @@
 {
-  "name": "trackdesk-backend",
+  "name": "workvion-backend",
   "version": "1.0.0",
   "type": "module",
-  "description": "TrackDesk – Employee Leave & Attendance Management System API",
+  "description": "Workvion – Employee Leave & Attendance Management System API",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

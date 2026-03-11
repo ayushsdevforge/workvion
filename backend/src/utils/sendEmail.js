@@ -20,12 +20,12 @@ const sendOtpEmail = async (to, otp, purpose) => {
   const isRegister = purpose === "registration";
 
   const subject = isRegister
-    ? "TrackDesk – Verify your email"
-    : "TrackDesk – Password reset code";
+    ? "Workvion – Verify your email"
+    : "Workvion – Password reset code";
 
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px">
-      <h2 style="color:#16a34a;margin:0 0 16px">TrackDesk</h2>
+      <h2 style="color:#16a34a;margin:0 0 16px">Workvion</h2>
       <p>Your ${isRegister ? "email verification" : "password reset"} code is:</p>
       <div style="font-size:32px;font-weight:bold;letter-spacing:8px;text-align:center;
                   padding:16px;background:#f0fdf4;border-radius:8px;margin:16px 0;color:#15803d">
@@ -60,10 +60,10 @@ export const sendLeaveStatusEmail = async (to, name, status, leave) => {
     day: "numeric", month: "short", year: "numeric",
   });
 
-  const subject = `TrackDesk – Leave ${label}`;
+  const subject = `Workvion – Leave ${label}`;
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px">
-      <h2 style="color:#16a34a;margin:0 0 16px">TrackDesk</h2>
+      <h2 style="color:#16a34a;margin:0 0 16px">Workvion</h2>
       <p>Hi <strong>${name}</strong>,</p>
       <p>Your leave request has been <span style="color:${color};font-weight:bold">${label}</span>.</p>
       <table style="width:100%;border-collapse:collapse;margin:16px 0">
@@ -72,7 +72,7 @@ export const sendLeaveStatusEmail = async (to, name, status, leave) => {
         <tr><td style="padding:8px;color:#6b7280">To</td><td style="padding:8px">${formatDate(leave.endDate)}</td></tr>
         <tr><td style="padding:8px;color:#6b7280">Days</td><td style="padding:8px">${leave.totalDays}</td></tr>
       </table>
-      <p style="color:#6b7280;font-size:14px">Log in to TrackDesk for more details.</p>
+      <p style="color:#6b7280;font-size:14px">Log in to Workvion for more details.</p>
     </div>
   `;
 

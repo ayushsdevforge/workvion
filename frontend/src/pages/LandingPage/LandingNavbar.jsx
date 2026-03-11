@@ -4,7 +4,7 @@ const LandingNavbar = ({ onLogin, onRegister, scrollTo }) => (
   <nav className="fixed top-0 inset-x-0 z-50 border-b border-brand-100/40 bg-white/60 backdrop-blur-2xl">
     <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <div className="cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-        <img src="/trackdesk.png.png" alt="TrackDesk" className="h-14 object-contain" />
+        <img src="/workvion.png" alt="Workvion" className="h-14 object-contain" />
       </div>
 
       <div className="hidden md:flex items-center gap-8">

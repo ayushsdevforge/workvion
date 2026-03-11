@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/TrackDesk-Employee%20Management-16a34a?style=for-the-badge&logo=checkmarx&logoColor=white" alt="TrackDesk" />
+  <img src="https://img.shields.io/badge/Workvion-Employee%20Management-16a34a?style=for-the-badge&logo=checkmarx&logoColor=white" alt="Workvion" />
 </p>
 
-<h1 align="center">TrackDesk</h1>
+<h1 align="center">Workvion</h1>
 
 <p align="center">
   <b>Employee Leave & Attendance Management System</b><br/>
@@ -22,7 +22,7 @@
 
 ## Project Overview
 
-**TrackDesk** is a role-based employee management system with two roles — **Employee** and **Admin**.
+**Workvion** is a role-based employee management system with two roles — **Employee** and **Admin**.
 
 ### Employee Features
 - Mark daily attendance (present / absent)
@@ -61,7 +61,7 @@
 ## Project Structure
 
 ```
-TrackDesk/
+Workvion/
 ├── backend/
 │   ├── .env                    # Environment variables
 │   ├── seed.js                 # Seeds the initial admin user
@@ -118,7 +118,7 @@ TrackDesk/
 ### 1. Clone the repository
 ```bash
 git clone <repository-url>
-cd TrackDesk
+cd Workvion
 ```
 
 ### 2. Backend Setup
