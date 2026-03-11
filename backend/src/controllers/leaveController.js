@@ -1,5 +1,6 @@
 import Leave from "../models/Leave.js";
 import User from "../models/User.js";
+import { sendLeaveStatusEmail } from "../utils/sendEmail.js";
 
 // Calculate the number of days between two dates 
 const calcDays = (start, end) => {
@@ -154,6 +155,9 @@ export const approveLeave = async (req, res, next) => {
     leave.status = "approved";
     await Promise.all([user.save(), leave.save()]);
 
+    // Send approval email (fire-and-forget)
+    sendLeaveStatusEmail(user.email, user.fullName, "approved", leave).catch(() => {});
+
     res.json({ success: true, data: leave });
   } catch (err) {
     next(err);
@@ -171,6 +175,11 @@ export const rejectLeave = async (req, res, next) => {
 
     leave.status = "rejected";
     await leave.save();
+
+    // Send rejection email (fire-and-forget)
+    const user = await User.findById(leave.userId);
+    sendLeaveStatusEmail(user.email, user.fullName, "rejected", leave).catch(() => {});
+
     res.json({ success: true, data: leave });
   } catch (err) {
     next(err);

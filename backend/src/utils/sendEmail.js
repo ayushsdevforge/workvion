@@ -44,4 +44,44 @@ const sendOtpEmail = async (to, otp, purpose) => {
   });
 };
 
+/**
+ * Send a leave-status notification email.
+ * @param {string} to        – recipient email
+ * @param {string} name      – employee's full name
+ * @param {"approved"|"rejected"} status
+ * @param {{ leaveType: string, startDate: Date, endDate: Date, totalDays: number }} leave
+ */
+export const sendLeaveStatusEmail = async (to, name, status, leave) => {
+  const isApproved = status === "approved";
+  const color = isApproved ? "#16a34a" : "#dc2626";
+  const label = isApproved ? "Approved" : "Rejected";
+
+  const formatDate = (d) => new Date(d).toLocaleDateString("en-IN", {
+    day: "numeric", month: "short", year: "numeric",
+  });
+
+  const subject = `TrackDesk – Leave ${label}`;
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px">
+      <h2 style="color:#16a34a;margin:0 0 16px">TrackDesk</h2>
+      <p>Hi <strong>${name}</strong>,</p>
+      <p>Your leave request has been <span style="color:${color};font-weight:bold">${label}</span>.</p>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0">
+        <tr><td style="padding:8px;color:#6b7280">Type</td><td style="padding:8px;font-weight:bold">${leave.leaveType}</td></tr>
+        <tr><td style="padding:8px;color:#6b7280">From</td><td style="padding:8px">${formatDate(leave.startDate)}</td></tr>
+        <tr><td style="padding:8px;color:#6b7280">To</td><td style="padding:8px">${formatDate(leave.endDate)}</td></tr>
+        <tr><td style="padding:8px;color:#6b7280">Days</td><td style="padding:8px">${leave.totalDays}</td></tr>
+      </table>
+      <p style="color:#6b7280;font-size:14px">Log in to TrackDesk for more details.</p>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    to,
+    subject,
+    html,
+  });
+};
+
 export default sendOtpEmail;
