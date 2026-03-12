@@ -17,7 +17,7 @@ const EmployeesPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [createModal, setCreateModal] = useState(false);
-  const [createForm, setCreateForm] = useState({ fullName: '', email: '', password: '' });
+  const [createForm, setCreateForm] = useState({ fullName: '', email: '', password: '', confirmPassword: '' });
   const [creating, setCreating] = useState(false);
   const [editModal, setEditModal] = useState(null);
   const [editForm, setEditForm] = useState({ fullName: '', leaveBalance: 20 });
@@ -39,8 +39,13 @@ const EmployeesPage = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    if (createForm.password !== createForm.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
     setCreating(true);
-    try { await userAPI.create(createForm); toast.success('Employee added'); setCreateModal(false); setCreateForm({ fullName: '', email: '', password: '' }); fetchUsers(); }
+    try { await userAPI.create({ fullName: createForm.fullName, email: createForm.email, password: createForm.password }); toast.success('Employee added'); setCreateModal(false); setCreateForm({ fullName: '', email: '', password: '', confirmPassword: '' }); fetchUsers(); }
     catch (err) { toast.error(getErrorMessage(err)); }
     finally { setCreating(false); }
   };
@@ -109,6 +114,7 @@ const EmployeesPage = () => {
           <FormInput label="Full Name" placeholder="John Doe" value={createForm.fullName} onChange={(e) => setCreateForm({ ...createForm, fullName: e.target.value })} required />
           <FormInput label="Email" type="email" placeholder="john@example.com" value={createForm.email} onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })} required />
           <FormInput label="Password" type="password" placeholder="Min 6 characters" value={createForm.password} onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })} required minLength={6} />
+          <FormInput label="Confirm Password" type="password" placeholder="Re-enter password" value={createForm.confirmPassword} onChange={(e) => setCreateForm({ ...createForm, confirmPassword: e.target.value })} required minLength={6} />
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="secondary" type="button" onClick={() => setCreateModal(false)}>Cancel</Button>
             <Button type="submit" loading={creating}>Add Employee</Button>

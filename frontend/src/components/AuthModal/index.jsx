@@ -2,20 +2,22 @@ import { useState, useEffect } from 'react';
 import { HiXMark, HiArrowLeft } from 'react-icons/hi2';
 import FormInput from '@/components/FormInput';
 import Button from '@/components/Button';
+import toast from 'react-hot-toast';
 
 const VIEWS = { LOGIN: 'login', REGISTER: 'register', REGISTER_OTP: 'register-otp', FORGOT: 'forgot', FORGOT_OTP: 'forgot-otp' };
 
 const AuthModal = ({ modal, onClose, onLogin, onSendRegisterOtp, onVerifyRegisterOtp, onForgotPassword, onResetPassword, loading }) => {
   const [view, setView] = useState(null);
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-  const [registerForm, setRegisterForm] = useState({ fullName: '', email: '', password: '', otp: '' });
-  const [resetForm, setResetForm] = useState({ email: '', otp: '', newPassword: '' });
+  const [registerForm, setRegisterForm] = useState({ fullName: '', email: '', password: '', confirmPassword: '', otp: '' });
+  const [resetForm, setResetForm] = useState({ email: '', otp: '', newPassword: '', confirmPassword: '' });
 
   useEffect(() => { if (modal) setView(modal === 'register' ? VIEWS.REGISTER : VIEWS.LOGIN); }, [modal]);
 
   if (!modal) return null;
 
   const update = (setter) => (field) => (e) => setter((prev) => ({ ...prev, [field]: e.target.value }));
+  const passwordsMatch = (password, confirmPassword) => password === confirmPassword;
 
   const titles = {
     [VIEWS.LOGIN]: ['Welcome back', 'Sign in to continue to your dashboard'],
@@ -62,7 +64,15 @@ const AuthModal = ({ modal, onClose, onLogin, onSendRegisterOtp, onVerifyRegiste
           )}
           {view === VIEWS.REGISTER && (
             <RegisterForm form={registerForm} update={update(setRegisterForm)} loading={loading}
-              onSubmit={async () => { await onSendRegisterOtp(registerForm); setRegisterForm((p) => ({ ...p, otp: '' })); setView(VIEWS.REGISTER_OTP); }}
+              onSubmit={async () => {
+                if (!passwordsMatch(registerForm.password, registerForm.confirmPassword)) {
+                  toast.error('Passwords do not match');
+                  return;
+                }
+                await onSendRegisterOtp(registerForm);
+                setRegisterForm((p) => ({ ...p, otp: '' }));
+                setView(VIEWS.REGISTER_OTP);
+              }}
               onLogin={() => setView(VIEWS.LOGIN)} />
           )}
           {view === VIEWS.REGISTER_OTP && (
@@ -72,12 +82,22 @@ const AuthModal = ({ modal, onClose, onLogin, onSendRegisterOtp, onVerifyRegiste
           )}
           {view === VIEWS.FORGOT && (
             <ForgotForm form={resetForm} update={update(setResetForm)} loading={loading}
-              onSubmit={async () => { await onForgotPassword(resetForm.email); setResetForm((p) => ({ ...p, otp: '', newPassword: '' })); setView(VIEWS.FORGOT_OTP); }}
+              onSubmit={async () => {
+                await onForgotPassword(resetForm.email);
+                setResetForm((p) => ({ ...p, otp: '', newPassword: '', confirmPassword: '' }));
+                setView(VIEWS.FORGOT_OTP);
+              }}
               onBack={() => setView(VIEWS.LOGIN)} />
           )}
           {view === VIEWS.FORGOT_OTP && (
             <ResetForm form={resetForm} update={update(setResetForm)} loading={loading}
-              onSubmit={() => onResetPassword(resetForm.email, resetForm.otp, resetForm.newPassword)}
+              onSubmit={() => {
+                if (!passwordsMatch(resetForm.newPassword, resetForm.confirmPassword)) {
+                  toast.error('Passwords do not match');
+                  return;
+                }
+                onResetPassword(resetForm.email, resetForm.otp, resetForm.newPassword);
+              }}
               onResend={async () => { await onForgotPassword(resetForm.email); setResetForm((p) => ({ ...p, otp: '' })); }} />
           )}
         </div>
@@ -106,6 +126,7 @@ const RegisterForm = ({ form, update, loading, onSubmit, onLogin }) => (
     <FormInput label="Full Name" placeholder="John Doe" value={form.fullName} onChange={update('fullName')} required />
     <FormInput label="Email" type="email" placeholder="you@example.com" value={form.email} onChange={update('email')} required />
     <FormInput label="Password" type="password" placeholder="Min 6 characters" value={form.password} onChange={update('password')} required minLength={6} />
+    <FormInput label="Confirm Password" type="password" placeholder="Re-enter password" value={form.confirmPassword} onChange={update('confirmPassword')} required minLength={6} />
     <Button type="submit" loading={loading} className="w-full">Send verification code</Button>
     <p className="text-center text-sm text-gray-500">
       Already have an account?{' '}
@@ -140,6 +161,7 @@ const ResetForm = ({ form, update, loading, onSubmit, onResend }) => (
   <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="space-y-4">
     <FormInput label="Verification Code" placeholder="Enter 6-digit code" value={form.otp} onChange={update('otp')} required maxLength={6} />
     <FormInput label="New Password" type="password" placeholder="Min 6 characters" value={form.newPassword} onChange={update('newPassword')} required minLength={6} />
+    <FormInput label="Confirm Password" type="password" placeholder="Re-enter password" value={form.confirmPassword} onChange={update('confirmPassword')} required minLength={6} />
     <Button type="submit" loading={loading} className="w-full">Reset password</Button>
     <p className="text-center text-sm text-gray-500">
       Didn't receive the code?{' '}
